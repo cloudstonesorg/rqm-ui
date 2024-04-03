@@ -1,0 +1,33 @@
+{
+    "baseUrl": "http:localhost:8000",
+    "scope": "",
+    "msal": {
+        "auth": {
+            "clientId": "96d3bd47-af8e-4d4a-b1ed-8831fb8e22bf",
+            "authority": "https://login.microsoftonline.com/c45ba563-117c-46f6-b433-6d6db50ab6e5",
+            "redirectUri": "http://localhost:4200",
+            "postLogoutRedirectUri": "http://localhost:4200",
+            "navigateToLoginRequestUrl": true
+
+        },
+        "cache": {
+            "cacheLocation": "localStorage",
+            "storeAuthStateInCookie": true
+        }
+          },
+      "guard": {
+        "InteractionType": "redirect",
+        "authRedirect": {
+            "scopes": ["user.read"]
+        },
+        "loginFailedRoute": ""
+      },
+      "interceptor": {
+        "InteractionType": "redirect",
+        "protectionResourceMap": [
+            ["https://graph.microsoft.com/v1.0/me", ["user.read"]]
+        ]
+      }  
+
+  }
+  

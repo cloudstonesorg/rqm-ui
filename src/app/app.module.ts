@@ -1,11 +1,17 @@
-// app.module.ts
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import { DatePipe } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { MsalModule, MSAL_CONFIG, MsalInterceptorConfiguration } from '@azure/msal-angular';
-import { ConfigurationService } from './configuration.service';
-import { environment } from '../environments/environment';
+import { MsalInterceptor, MsalGuard, MsalRedirectComponent } from '@azure/msal-angular';
+import { MsalConfigDynamicModule } from './msal-config-dynamic.module';
+
 import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
+
+const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
 
 @NgModule({
   declarations: [
@@ -13,30 +19,25 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
+    AppRoutingModule,
     HttpClientModule,
-    MsalModule
+    MsalConfigDynamicModule.forRoot('assets/app.config.json'),
   ],
   providers: [
-    ConfigurationService,
-    {
-      provide: MSAL_CONFIG,
-      useFactory: (configService: ConfigurationService) => configService.getMsalConfig(),
-      deps: [ConfigurationService]
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: MsalInterceptor,
-      multi: true
-    },
-    {
-      provide: MsalInterceptorConfiguration,
-      useFactory: (configService: ConfigurationService) => configService.getMsalInterceptorConfig(),
-      deps: [ConfigurationService]
-    }
+    { provide: HTTP_INTERCEPTORS, useClass: MsalInterceptor, multi: true },
+    // { provide: HTTP_INTERCEPTORS, useClass: MsalInterceptor, multi: true },
+    MsalGuard,
+    DatePipe,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent, MsalRedirectComponent]
 })
-export class AppModule { }
+
+export class AppModule {
+  constructor () {
+
+  }
+ }
 
 
 

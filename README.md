@@ -10,6 +10,7 @@ git clone https://github.com/cloudstonesorg/rqm-ui && cd rqm-ui
 npm install
 or
 npm install --force
+if you face any issues with ng cli => npm install -g  @angular/cli@13.3.5 --force
 ```
 # Run using built-in server
 ```
